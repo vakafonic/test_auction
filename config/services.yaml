@@ -1,0 +1,40 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    TestTask\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+                
+    Symfony\Component\Serializer\Serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            $normalizers:
+                - '@serializer.normalizer.property' 
+                - '@serializer.normalizer.object' 
+                - '@serializer.normalizer.json_serializable' 
+                - '@serializer.normalizer.datetime' 
+                - '@serializer.normalizer.datetimezone' 
+            $encoders: 
+                - '@serializer.encoder.json'
+        
+    Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        arguments:
+            $classMetadataFactory: '@Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory'
+        
+    Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory:
+        class: Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory
+        arguments:
+            $loader: '@Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader'
+    
+    Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader:
+        class: Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader
+        arguments:
+            $reader: '@annotations.reader'
