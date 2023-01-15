@@ -15,7 +15,7 @@ ENV STABILITY ${STABILITY}
 ARG SYMFONY_VERSION=""
 ENV SYMFONY_VERSION ${SYMFONY_VERSION}
 
-ENV APP_ENV=prod
+ENV APP_ENV=dev
 
 WORKDIR /srv/app
 
@@ -37,6 +37,7 @@ RUN set -eux; \
     	zip \
     	apcu \
 		opcache \
+    	bcmath \
     ;
 
 ###> recipes ###
@@ -76,7 +77,7 @@ COPY --from=composer/composer:2-bin --link /composer /usr/bin/composer
 COPY composer.* symfony.* ./
 RUN set -eux; \
     if [ -f composer.json ]; then \
-		composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \
+		composer install --prefer-dist --no-autoloader --no-scripts --no-progress; \
 		composer clear-cache; \
     fi
 
@@ -87,9 +88,9 @@ RUN rm -Rf docker/
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
     if [ -f composer.json ]; then \
-		composer dump-autoload --classmap-authoritative --no-dev; \
-		composer dump-env prod; \
-		composer run-script --no-dev post-install-cmd; \
+		composer dump-autoload --classmap-authoritative; \
+		composer dump-env dev; \
+		composer run-script post-install-cmd; \
 		chmod +x bin/console; sync; \
     fi
 
