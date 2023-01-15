@@ -11,6 +11,7 @@ Task description is provided as picture to do not index it by google.
 1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
 2. Run `docker compose build --pull --no-cache` to build fresh images
 3. Run `docker compose up` (the logs will be displayed in the current shell)
+   * If you have some troubles with port bindings - use [docker-compose.override.yml](docker-compose.override.yml) to override them by some free ports
 4. Run `docker-compose exec php vendor/bin/phpunit --coverage-text` to run all tests with coverage report (xdebug is in place ;) ) 
 5. Run `docker-compose exec php bin/console doctrine:fixtures:load` to populate the DB using the data from example
 6. Run `docker-compose exec php bin/console bid:get-winning 1` to get the result of auction based on fixtures using the application (Id could be different if you were having troubles with DB population)
