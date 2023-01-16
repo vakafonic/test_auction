@@ -27,9 +27,7 @@ class SecondPriceSealedBidPerformanceOptimizedStrategy implements AuctionStrateg
         /** @var Bid $bid */
         $topBid = $winnerBid = (new Bid())->setValue($parameters->getReservePrice());
         foreach ($parameters->getBids() as $bid) {
-            if (bccomp($bid->getValue(), $winnerBid->getValue()) <= 0
-                || bccomp($bid->getValue(), $parameters->getReservePrice()) < 0
-            ) {
+            if (bccomp($bid->getValue(), $winnerBid->getValue()) <= 0) {
                 // if iterable bid lower|equals than winner - we are not interested in this
                 // OR bid is bellow reserve price, so it should be skipped by definition
                 continue;
